@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:llt/pages/setup/Welcome.dart';
 import 'package:llt/pages/setup/DataController.dart';
+import 'package:llt/pages/setup/search.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
 
         // This is the theme of your application.

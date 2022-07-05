@@ -11,7 +11,7 @@ import 'package:llt/pages/setup/LoginPage.dart';
 import 'package:llt/pages/setup/Mylocation.dart';
 
 import 'package:llt/pages/setup/editprofile.dart';
-import 'package:llt/pages/setup/groups.dart';
+import 'package:llt/pages/setup/createGroup.dart';
 import 'package:llt/pages/setup/register_screen.dart';
 import 'package:llt/pages/setup/search.dart';
 
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> {
               ),
               RaisedButton(
                 onPressed: () {Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>LoginPage()));},
+                    MaterialPageRoute(builder: (context) =>Search()));},
                 child: Text('Group details'),
                 color: Colors.brown,
               )

@@ -36,6 +36,8 @@ dependencies:
   http: ^0.13.3
   shared_preferences: ^2.0.6
   circular_profile_avatar: ^2.0.0
+  cool_alert: ^1.1.0
+  expansion_tile_card: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
