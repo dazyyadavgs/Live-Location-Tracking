@@ -27,9 +27,12 @@ class _GroupListState extends State<GroupList> {
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> cs =  FirebaseFirestore.instance
         .collection('groups')
-        .where('users', isEqualTo: user.displayName.toString())
+       // .where('users', isEqualTo: user.displayName.toString())
         .snapshots();
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Group List'),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: cs,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
@@ -73,7 +76,6 @@ class _GroupListState extends State<GroupList> {
                   child: Text(
                     // TODO
                       "Create a group by clicking on the '+' button",
-
                       textAlign: TextAlign.center),
                 ),
               );
