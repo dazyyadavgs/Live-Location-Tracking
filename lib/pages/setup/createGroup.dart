@@ -32,6 +32,7 @@ class _GroupsState extends State<Groups> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+
         body: Padding(
           padding: const EdgeInsets.only(top: 30.0),
           child: Column(

@@ -32,18 +32,20 @@ class _editState extends State<edit> {
       print(e);
     }
   }
-
+@override
   void initState(){
     super.initState();
+
     getCurrentUser();
   }
 
 
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
-  Future<void> addUser() {
-    return users
-        .doc(loggedInUser!.uid)
-        .set({"name": _name,"email":_email}).then((value)=>print("User Added"))
+  Future<void> addUser(){
+
+  return users
+        .doc(loggedInUser?.uid)
+        .set({"displayName": _name,"email":_email,"uid":loggedInUser?.uid}).then((value)=>print("User Added"))
         .catchError((error)=>print("Failed to add user: $error"));
   }
 
@@ -51,14 +53,18 @@ class _editState extends State<edit> {
   fetchData() {
     CollectionReference collectionReference = FirebaseFirestore.instance
         .collection('Users');
-    Stream documentStream = FirebaseFirestore.instance.collection('Users').doc(
+    Stream documentStream = collectionReference.doc(
         loggedInUser!.uid).snapshots();
     print(FirebaseFirestore.instance.collection('Users')
         .doc(loggedInUser!.uid)
         .get());
     documentStream.listen((snapshot) {
       setState(() {
-        data = snapshot.data() as Map?;
+
+       data = snapshot.data() as Map?;
+       //_name=data!['displayName'];
+       //_email=data!['email'];
+
         print(data.toString());
       });
     });
@@ -77,15 +83,31 @@ class _editState extends State<edit> {
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done)
             return Text("Update Details");
-          return Text("name:$_name,email: $_email");
+         else
+           return Column(
+            children: [
+              Text("name:$_name"),
+              Text("email: $_email"),
+
+            ],
+          );
 
           },
       ),
     Padding(
     padding: const EdgeInsets.fromLTRB(0,32,0,0),
-    child: Text(
-    data.toString(),
-    style: TextStyle(fontSize: 25)
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+        data!['displayName'],
+        style: TextStyle(fontSize: 25)
+        ),
+        Text(
+            data!['email'],
+            style: TextStyle(fontSize: 25)
+        ),
+      ],
     ),
     ),
 
@@ -95,6 +117,7 @@ class _editState extends State<edit> {
     ),
     TextField(
     onChanged: (value) {
+
     _name = value;
     },
     decoration: InputDecoration(

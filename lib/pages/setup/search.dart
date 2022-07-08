@@ -5,6 +5,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:llt/pages/setup/Showgroup.dart';
 
 import 'createGroup.dart';
 
@@ -80,13 +81,24 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+         title: Text(
+           'Group Detail'
+         ),
+        ),
         body: Padding(
           padding: const EdgeInsets.only(top: 30.0,),
           child: Column(
             children: [
               Padding(
+                padding: const EdgeInsets.only(top: 20.0,left: 20.0,),
+                child: ElevatedButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>GroupList()));
+                }, child: Text('Check Existing Group')),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text('Add Existing Users in a Group!',style: TextStyle(fontWeight: FontWeight.bold),),
+                child: Text('Add Existing Users in a New Group!',style: TextStyle(fontWeight: FontWeight.bold),),
               ),
               SizedBox(height: 10.0,),
 

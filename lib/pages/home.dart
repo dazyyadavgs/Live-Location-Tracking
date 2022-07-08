@@ -25,37 +25,52 @@ class _HomeState extends State<Home> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final userCollection = FirebaseFirestore.instance.collection("Users");
   String? name, email,uid;
-  User? loggedInUser;
+   Map? data;
+   User? loggedInUser;
 
 
   void getCurrentUser() async {
     try {
       final user = _auth.currentUser;
-      if (user != null) {
+      if (user!=null) {
         loggedInUser = user;
+
       }
+
     } catch (e) {
       print(e);
     }
   }
-
-
-
+  @override
   void initState() {
     super.initState();
     getCurrentUser();
   }
+  Future<void>userData()  async{
+ /* CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('Users');
+    Stream documentStream = collectionReference.doc(
+        loggedInUser?.uid).snapshots();
+    documentStream.listen((snapshot) {
 
-  Future<void> userData()  async{
-    final user= loggedInUser!.uid;
-    await FirebaseFirestore.instance.collection('Users').where('uid',isEqualTo: uid).get().then((QuerySnapshot querySnapshot) {
+        data =  snapshot.data() as Map?;
+        name=data!['displayName'];
+        email=data!['email'];
+
+
+    }); */
+
+
+   FirebaseFirestore.instance.collection('Users').where('uid',isEqualTo: loggedInUser?.uid).get().then((QuerySnapshot querySnapshot)async{
       querySnapshot.docs.forEach((doc) {
-        name = loggedInUser!.displayName;
-        email = loggedInUser!.email;
+        name = loggedInUser?.displayName;
+        email = loggedInUser?.email;
 
 
       });
     });
+
+
   }
 
 
@@ -64,13 +79,13 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Page'),
-        backgroundColor: Colors.deepPurple,
+       // backgroundColor: Colors.deepPurple,
         actions: [
           Row(
             children: <Widget>[
               FlatButton.icon(
                   onPressed: () {
-                    FirebaseAuth.instance.signOut();
+                   _auth.signOut();
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Register()));
                   },
@@ -111,12 +126,43 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 10,
               ),
-              FutureBuilder(
+          /*  Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Hello ",style: TextStyle(fontSize: 25)),
+                    Text(
+                       data!['displayName'],
+                        style: TextStyle(fontSize: 25)
+                    ),
+                    Text("!",style: TextStyle(fontSize: 25)),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Email: ",style: TextStyle(fontSize: 25)),
+                    Text(
+                        data!['email'],
+                        style: TextStyle(fontSize: 25)
+                    ),
+                  ],
+                ),
+              ],
+            ), */
+             FutureBuilder(
             future: userData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done)
                 return Text("Loading data...Please wait");
-              return Text("Name : $name,Email:$email",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),);
+              return Column(
+                children: [
+                  Text("Hello  $name!",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                  Text("Email: $email",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                ],
+              );
               },
               ),
 
@@ -124,27 +170,18 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 10.0,
               ),
-
-
-          IconButton(icon: Icon(Icons.location_on,color: Colors.blue,),onPressed: () {Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyLocation()));}),
-              SizedBox(
-                height: 10.0,
-              ),
-
-           Text(
-          "To Get User Current Location click on the location icon",
-           style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.bold),
-
-           ),
+              ElevatedButton(onPressed: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyLocation()));
+              }, child: Text('Get Current Location of the User')),
               SizedBox(
                 height: 300,
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {Navigator.push(context,
                     MaterialPageRoute(builder: (context) =>Search()));},
                 child: Text('Group details'),
-                color: Colors.brown,
+
               )
             ],
           ),
