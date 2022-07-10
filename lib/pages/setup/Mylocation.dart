@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,6 +23,7 @@ class MyLocation extends StatefulWidget {
 }
 
 class _MyLocationState extends State<MyLocation> {
+  late User user;
   var locationMessage="";
   void getCurrentLocation() async{
     var position=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -34,7 +37,32 @@ class _MyLocationState extends State<MyLocation> {
     });
   }
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user=FirebaseAuth.instance.currentUser!;
 
+  }
+  addlocationfield() async {
+    var position=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var lastPosition=await Geolocator.getLastKnownPosition();
+    print(lastPosition);
+    var lat=position.latitude;
+    var long=position.longitude;
+    print("$lat,$long");
+    setState(() {
+      locationMessage= "Latitude: $lat, Longitude: $long";
+    });
+   FirebaseFirestore.instance.collection('Users')
+        .doc(user.uid)
+        .set({
+      'Location': '$locationMessage'
+    },SetOptions(merge: true)).then((value){
+      //Do your stuff.
+      print(locationMessage);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +99,8 @@ class _MyLocationState extends State<MyLocation> {
             FlatButton(
               onPressed: () {
                 getCurrentLocation();
+               addlocationfield();
+
               },
               color: Colors.blue[800],
               child: Text("Get Current Location", style: TextStyle(color: Colors.white),),

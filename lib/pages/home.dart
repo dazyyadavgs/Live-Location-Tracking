@@ -45,9 +45,10 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     getCurrentUser();
+
   }
   Future<void>userData()  async{
- /* CollectionReference collectionReference = FirebaseFirestore.instance
+  CollectionReference collectionReference = FirebaseFirestore.instance
         .collection('Users');
     Stream documentStream = collectionReference.doc(
         loggedInUser?.uid).snapshots();
@@ -58,22 +59,19 @@ class _HomeState extends State<Home> {
         email=data!['email'];
 
 
-    }); */
-
-
-   FirebaseFirestore.instance.collection('Users').where('uid',isEqualTo: loggedInUser?.uid).get().then((QuerySnapshot querySnapshot)async{
-      querySnapshot.docs.forEach((doc) {
-        name = loggedInUser?.displayName;
-        email = loggedInUser?.email;
-
-
-      });
     });
 
 
+ /* FirebaseFirestore.instance.collection('Users').where('uid',isEqualTo: loggedInUser?.uid).get().then((QuerySnapshot querySnapshot)async{
+      querySnapshot.docs.forEach((doc) {
+
+          name = loggedInUser?.displayName;
+          email = loggedInUser?.email;
+
+
+      });
+    }); */
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,6 +157,17 @@ class _HomeState extends State<Home> {
                 return Text("Loading data...Please wait");
               return Column(
                 children: [
+                  if(name==null || email==null)...[
+                    Icon(Icons.error),
+                    Text('Failed to fetch data.'),
+                    RaisedButton(
+                      child: Text('Refresh'),
+                      onPressed: (){
+                        setState(() {
+                        });
+                      },
+                    ),
+                  ],
                   Text("Hello  $name!",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                   Text("Email: $email",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                 ],
