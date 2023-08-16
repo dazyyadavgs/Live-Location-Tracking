@@ -52,6 +52,7 @@ class _SearchState extends State<Search> {
         _selectedusernamesbool.update(label, (value) => false,
             ifAbsent: () => false);
         _selectedusernames.removeAt(_selectedusernames.indexOf(label));
+
       },
     );
   }
@@ -112,24 +113,24 @@ class _SearchState extends State<Search> {
 
                  await  FirebaseFirestore.instance
                       .collection("Users")
-                      .where("displayName", isEqualTo: text)
+                      .where("uid", isEqualTo: text)
                       .get()
                       .then((snapshot) {
                         setState(() {
 
                         snapshot.docs.forEach((element)
                        {
-                         if (element['displayName']!=user.displayName.toString()!) {
-                         if (!_usernames.contains(element['displayName'])) {
-                           _usernames.insert(i, element['displayName']);
+                         if (element['uid']!=user.uid.toString()!) {
+                         if (!_usernames.contains(element['uid'])) {
+                           _usernames.insert(i, element['uid']);
                            if (_selectedusernames.contains(
-                               element['displayName'])) {
+                               element['uid'])) {
                              _selectedusernamesbool.update(
-                                 element['displayName'], (value) => true,
+                                 element['uid'], (value) => true,
                                  ifAbsent: () => true);
                            } else {
                              _selectedusernamesbool.update(
-                                 element['displayName'], (value) => false,
+                                 element['uid'], (value) => false,
                                  ifAbsent: () => false);
                            }
                          }

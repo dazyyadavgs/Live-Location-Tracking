@@ -5,9 +5,11 @@ Future<void> userSetup(String displayName,String email) async {
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   FirebaseAuth auth = FirebaseAuth.instance;
   String uid = auth.currentUser!.uid.toString();
+  //  String uid=displayName;
 
 
-  users.doc(uid).set({'displayName': displayName,'uid': uid,'email':email,});
+
+  users.doc(uid).set({'displayName': displayName,'uid': uid,'email':email});
 
   return;
 }

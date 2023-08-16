@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Mygeoloc extends StatefulWidget {
+  //var locationMessage;
   const Mygeoloc({Key? key}) : super(key: key);
 
   @override
@@ -21,7 +22,7 @@ class _MygeolocState extends State<Mygeoloc> {
 
 
 
-
+@override
   void initState()
   {
     super.initState();
@@ -50,7 +51,7 @@ class _MygeolocState extends State<Mygeoloc> {
                   width: double.infinity,
                   child: mapToggle ?
                   GoogleMap(
-                    mapType: MapType.normal,
+                    mapType: MapType.hybrid,
                     myLocationEnabled: true,
                     initialCameraPosition: CameraPosition(
                         target: LatLng(currentLocation.latitude,currentLocation.longitude),

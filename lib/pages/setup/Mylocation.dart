@@ -25,7 +25,11 @@ class MyLocation extends StatefulWidget {
 class _MyLocationState extends State<MyLocation> {
   late User user;
   var locationMessage="";
-  void getCurrentLocation() async{
+  Map? data;
+  //User? loggedInUser;
+  //final userCollection = FirebaseFirestore.instance.collection("Users");
+
+  /* void getCurrentLocation() async{
     var position=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     var lastPosition=await Geolocator.getLastKnownPosition();
     print(lastPosition);
@@ -35,7 +39,7 @@ class _MyLocationState extends State<MyLocation> {
     setState(() {
       locationMessage= "Latitude: $lat, Longitude: $long";
     });
-  }
+  } */
 
 @override
   void initState() {
@@ -44,7 +48,7 @@ class _MyLocationState extends State<MyLocation> {
     user=FirebaseAuth.instance.currentUser!;
 
   }
-  addlocationfield() async {
+ /* addlocationfield() async {
     var position=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     var lastPosition=await Geolocator.getLastKnownPosition();
     print(lastPosition);
@@ -61,6 +65,30 @@ class _MyLocationState extends State<MyLocation> {
     },SetOptions(merge: true)).then((value){
       //Do your stuff.
       print(locationMessage);
+    });
+  } */
+  fetchData() {
+    CollectionReference collectionReference = FirebaseFirestore.instance
+        .collection('Users');
+    Stream documentStream = collectionReference.doc(
+        user!.uid).snapshots();
+    print(FirebaseFirestore.instance.collection('Users')
+        .doc(user!.uid)
+        .get());
+    documentStream.listen((snapshot) {
+      setState(() {
+
+        data = snapshot.data() as Map?;
+        if(data!=null)
+          locationMessage=data!['Location'];
+        else
+          locationMessage="";
+
+        //_name=data!['displayName'];
+        //_email=data!['email'];
+
+        print(data.toString());
+      });
     });
   }
   @override
@@ -95,11 +123,14 @@ class _MyLocationState extends State<MyLocation> {
               height: 20.0,
 
             ),
-            Text("Position: $locationMessage"),
+            Text("$locationMessage"),
             FlatButton(
               onPressed: () {
-                getCurrentLocation();
-               addlocationfield();
+               // getCurrentLocation();
+
+              // addlocationfield();
+                fetchData();
+
 
               },
               color: Colors.blue[800],
@@ -108,15 +139,18 @@ class _MyLocationState extends State<MyLocation> {
             SizedBox(
               height: 20.0,
             ),
-            RaisedButton(
+           /* RaisedButton(
               onPressed: navigateToMygeoloc,
               child: Text('To get map view click here'),
               color: Colors.tealAccent,
 
-            )
+            ) */
           ],
         ),
       ),
+      floatingActionButton: locationMessage!=""?FloatingActionButton(
+        child: Text('Map View',textAlign: TextAlign.center,),
+          onPressed: navigateToMygeoloc):null,
     );
   }
   void navigateToMygeoloc(){

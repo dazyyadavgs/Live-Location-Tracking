@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:llt/pages/setup/createGroup.dart';
 
+import 'GroupLocation.dart';
+
 
 class GroupList extends StatefulWidget {
   // String grpname;
@@ -60,10 +62,15 @@ class _GroupListState extends State<GroupList> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          subtitle: Text(
-                            groupdata[index]['users'].join(', '),
-                            maxLines: 1,
-                          ),
+                          subtitle: FlatButton(
+                            child: Text(
+                              groupdata[index]['users'].join(', '),
+                              maxLines: 1,
+                            ),
+                            onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>GroupLocation(group: groupdata[index]['users'])));
+                            },
+                          )
                         ),
                       );
                   }
